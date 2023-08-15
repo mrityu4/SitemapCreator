@@ -1,0 +1,14 @@
+<svg fill="rgb(13, 148, 136)" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    stroke="rgb(13, 148, 136)" stroke-width="0.256" transform="rotate(0)">
+    <g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)">
+        <rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="7.68" fill="#242424" strokewidth="0"></rect>
+    </g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier">
+        <title>alt-plus-window</title>
+        <path
+            d="M0 26.016q0 2.496 1.76 4.224t4.256 1.76h20q2.464 0 4.224-1.76t1.76-4.224v-20q0-2.496-1.76-4.256t-4.224-1.76h-20q-2.496 0-4.256 1.76t-1.76 4.256v20zM4 26.016v-18.016h24v18.016q0 0.832-0.576 1.408t-1.408 0.576h-20q-0.832 0-1.44-0.576t-0.576-1.408zM4 4q0-0.832 0.576-1.408t1.44-0.576 1.408 0.576 0.576 1.408-0.576 1.44-1.408 0.576-1.44-0.576-0.576-1.44zM10.016 20h4v4h4v-4h4v-4h-4v-4h-4v4h-4v4z">
+        </path>
+    </g>
+</svg>
+<!-- https://www.svgrepo.com/svg/514020/alt-plus-window?edit=true -->
