@@ -52,7 +52,7 @@ function Page({
     const newBlock: Block = {
       name: "",
       key: crypto.randomUUID(),
-      color: "blue",
+      color: "#cdb4db",
       wframe: "img1",
     };
     let pageBlocks: Blocks = [];
