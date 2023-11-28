@@ -1,8 +1,8 @@
-import React from "react";
-import Input from "../input/input";
-import ConfigBox from "../ConfigBox";
-import useModalOutsideClick from "../../hooks/useModalOutsideClick";
 import { colors, wframes } from "../../assets/constants/contants";
+import useModalOutsideClick from "../../hooks/useModalOutsideClick";
+import ConfigBox from "../ConfigBox";
+import Input from "../input/input";
+
 type Block = {
   name: string;
   key: string;
@@ -29,7 +29,7 @@ function Block({
   return (
     <div
       ref={blockRef}
-      className="relative rounded-lg my-2"
+      className="relative my-2 rounded-lg"
       style={{ backgroundColor: data.color }}
       onClick={() => handleConfigBox(true)}
     >
@@ -48,7 +48,7 @@ function Block({
       />
       {data.wframe && (
         <img
-          className="h-10 w-36"
+          className="w-36 h-10"
           src={wframes[data.wframe]}
           alt="wireframe option"
         />
