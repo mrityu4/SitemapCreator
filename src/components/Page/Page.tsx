@@ -11,7 +11,7 @@ import Button from "../Button/Button";
 type Block = {
   name: string;
   key: string;
-  color: typeof colors[number];
+  color: (typeof colors)[number];
   wframe: keyof typeof wframes | undefined;
 };
 type Blocks = Block[];
@@ -42,7 +42,6 @@ function Page({
   React.useEffect(() => {
     const readPageBlocks = async () => {
       const storedPageBlocks = await getPageBlocks(pagekey);
-      // console.log(storedPageBlocks);
       if (storedPageBlocks) setBlocks(storedPageBlocks?.blocks);
     };
     readPageBlocks();

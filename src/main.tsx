@@ -7,9 +7,10 @@ import { PocketProvider } from "./contexts/PocketContext";
 import "./index.css";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
+import { Projects } from "./pages/Projects";
 
 export const App = () => {
-  console.log("hete");
+  // console.log("hete");
   return (
     <PocketProvider>
       <BrowserRouter>
@@ -17,7 +18,10 @@ export const App = () => {
           <Route index element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route element={<RequireAuth />}>
-            <Route path="/protected" element={<SiteMapApp />} />
+            <Route path="/edit/:projectId" element={<SiteMapApp />} />
+          </Route>
+          <Route element={<RequireAuth />}>
+            <Route path="/projects" element={<Projects />} />
           </Route>
         </Routes>
       </BrowserRouter>
@@ -26,5 +30,5 @@ export const App = () => {
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <App />
+  <App />,
 );

@@ -1,9 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Tree } from "react-organizational-chart";
+import { useNavigate, useParams } from "react-router-dom";
 import "./App.css";
-import { storePage, getSitePages } from "./store";
+import logoutImg from "./assets/imgs/logout.svg";
+import syncImg from "./assets/imgs/sync.svg";
 import Page from "./components/Page/Page";
-import { Tree, TreeNode } from "react-organizational-chart";
 import SubTree from "./components/Tree/Tree";
+import { usePocket } from "./contexts/PocketContext";
+import {
+  batchStorePage,
+  batchStorePageBlocks,
+  getSitePages,
+  storePage,
+} from "./store";
+
 type PageData = {
   name: string;
   key: string;
@@ -36,30 +46,51 @@ function App() {
   let initialDistance: number = 1;
   let initialScale: number;
   let scale = 1;
+  const { logout, syncProject, fetchProjectData } = usePocket()!;
 
   const [pages, setPages] = React.useState<
     { [key: string]: PageData } | undefined
   >();
   const [collapsed, setCollapsed] = React.useState(false);
   const siteMapRef = React.createRef<HTMLDivElement>();
-  console.log(pages);
+
+  const navigate = useNavigate();
+  const { projectId } = useParams();
+
   React.useEffect(() => {
-    const readPages = async () => {
-      const storedPages = await getSitePages();
-      // console.log(storedPages);
-      if (!storedPages) {
-        storePage({ name: "HomePage", key: "homepage", Children: [] });
-        setPages({
-          homepage: { name: "HomePage", key: "homepage", Children: [] },
-        });
-        return;
+    const fetchAndSaveProject = async (projectId: string) => {
+      let storedPages;
+      storedPages = await fetchProjectData(projectId);
+      if (storedPages.pageData) {
+        await batchStorePageBlocks(Object.values(storedPages.pageData));
       }
-
-      setPages(storedPages);
+      batchStorePage(Object.values(storedPages.siteData));
+      setPages(storedPages.siteData);
     };
-    readPages();
 
+    if (projectId) fetchAndSaveProject(projectId);
+    else navigate("/projects");
+
+    // readPages();
+  }, []);
+
+  // const readPages = async () => {
+  //   const storedPages = await getSitePages();
+  //   // console.log(storedPages);
+  //   if (!storedPages) {
+  //     storePage({ name: "HomePage", key: "homepage", Children: [] });
+  //     setPages({
+  //       homepage: { name: "HomePage", key: "homepage", Children: [] },
+  //     });
+  //     return;
+  //   }
+  //   setPages(storedPages);
+  // };
+
+  React.useEffect(() => {
+    if (!pages) return;
     const tree: HTMLElement | null = document.querySelector("#sitemap > ul");
+    window.addEventListener("beforeunload", syncProject);
     document.getElementById("root")?.addEventListener("wheel", (e) => {
       // e.preventDefault();
       if (tree) {
@@ -70,6 +101,7 @@ function App() {
         tree.style.top = `${newY}px`;
       }
     });
+
     setTimeout(() => {
       if (tree) {
         const initialLeftPos = (window.innerWidth - tree?.clientWidth) / 2;
@@ -80,7 +112,7 @@ function App() {
     }, 55);
     return () =>
       document.getElementById("root")?.removeEventListener("wheel", () => {});
-  }, []);
+  }, [Boolean(pages)]);
 
   const getDistance = (touch1: React.Touch, touch2: React.Touch) => {
     const dx = touch1.clientX - touch2.clientX;
@@ -116,7 +148,6 @@ function App() {
 
   const onPageChange = (newName: string, key: string) => {
     const { Children } = pages?.[key] ?? { Children: [] };
-    console.log("called");
     storePage({ name: newName, key, Children });
     const readPages = async () => {
       const storedPages = await getSitePages();
@@ -126,7 +157,9 @@ function App() {
   };
 
   const onPageAdd = async (parentKey: string) => {
+    // console.log("called here");
     const parentPage = pages?.[parentKey];
+    // console.log("3", parentPage);
     if (!parentPage) return;
     const newPage = { name: "", key: crypto.randomUUID(), Children: [] };
     parentPage?.Children.push(newPage.key);
@@ -139,40 +172,55 @@ function App() {
     };
     readPages();
   };
+
   // useEffect(() => {
   //   console.log(pages, pages?.["homepage"]?.Children?.length);
   // }, [pages]);
+  //
+  //
+  //
+  if (!pages) return null;
+
   return (
-    <TreeContext.Provider value={{ pages, onPageAdd, onPageChange }}>
-      <div
-        id="sitemap"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        ref={siteMapRef}
-      >
-        <Tree
-          lineColor={"green"}
-          label={
-            <Page
-              key="homepage"
-              pagekey="homepage"
-              name={pages?.["homepage"].name as string}
-              updatePage={onPageChange}
-              parentKey="homepage"
-              onPageAdd={onPageAdd}
-              toggleCollapse={() => setCollapsed((p) => !p)}
-              collapsed={collapsed}
-              hasChild={(pages?.["homepage"]?.Children?.length as number) > 0}
-            />
-          }
+    <>
+      <button onClick={syncProject} className="w-8 h-8">
+        <img src={syncImg} alt="add block" />
+      </button>
+
+      <button onClick={logout} className="w-8 h-8">
+        <img src={logoutImg} alt="add block" />
+      </button>
+      <TreeContext.Provider value={{ pages, onPageAdd, onPageChange }}>
+        <div
+          id="sitemap"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          ref={siteMapRef}
         >
-          {collapsed || !pages?.["homepage"]?.Children.length ? null : (
-            <SubTree parentKey="homepage" />
-          )}
-        </Tree>
-      </div>
-    </TreeContext.Provider>
+          <Tree
+            lineColor={"green"}
+            label={
+              <Page
+                key="homepage"
+                pagekey="homepage"
+                name={pages?.["homepage"].name as string}
+                updatePage={onPageChange}
+                parentKey="homepage"
+                onPageAdd={onPageAdd}
+                toggleCollapse={() => setCollapsed((p) => !p)}
+                collapsed={collapsed}
+                hasChild={(pages?.["homepage"]?.Children?.length as number) > 0}
+              />
+            }
+          >
+            {collapsed || !pages?.["homepage"]?.Children.length ? null : (
+              <SubTree parentKey="homepage" />
+            )}
+          </Tree>
+        </div>
+      </TreeContext.Provider>
+    </>
   );
 }
 

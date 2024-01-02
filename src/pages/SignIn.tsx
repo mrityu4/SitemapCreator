@@ -19,9 +19,9 @@ export const SignIn = () => {
       }
 
       await login(emailRef.current.value, passwordRef.current.value);
-      navigate("/protected");
+      navigate("/projects");
     },
-    [login]
+    [login],
   );
 
   return (
@@ -31,7 +31,7 @@ export const SignIn = () => {
         <input placeholder="Email" type="email" ref={emailRef} />
         <input placeholder="Password" type="password" ref={passwordRef} />
         <button type="submit">Login</button>
-        <Link to="/">Go to Login</Link>
+        <Link to="/">New User? Register</Link>
       </form>
     </section>
   );

@@ -14,6 +14,7 @@ function SubTree({ parentKey }: { parentKey: string }) {
 
   const editorContext = useTreeContext();
   const { pages, onPageAdd, onPageChange } = editorContext;
+
   if (pages?.[parentKey] && pages?.[parentKey]?.Children.length) {
     return (
       <>
@@ -24,6 +25,7 @@ function SubTree({ parentKey }: { parentKey: string }) {
 
           return (
             <TreeNode
+              key={pages?.[child].key}
               label={
                 <Page
                   key={pages?.[child].key}
