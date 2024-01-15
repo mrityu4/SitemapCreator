@@ -11,9 +11,9 @@ import {
 } from "react";
 import { useInterval } from "usehooks-ts";
 import { colors, wframes } from "../assets/constants/contants";
-import { getBlocksOfAllPages, getSitePages } from "../store";
+import { deleteDataBase, getBlocksOfAllPages, getSitePages } from "../store";
 
-const BASE_URL = "http://127.0.0.1:8090";
+const BASE_URL = "https://bright-lunch.pockethost.io/";
 const fiveMinutesInMs = 5 * 60 * 1000;
 const twoMinutesInMs = 2 * 60 * 1000;
 
@@ -53,12 +53,13 @@ type PocketContextProps = {
   register: (email: string, password: string) => Promise<any>;
   login: (email: string, password: string) => Promise<any>;
   createNewProject: (
-    projectName: string,
+    projectName: string
   ) => Promise<{ siteData: string; pageData: PageBlocks } & { id: string }>;
   fetchProjectData: (projectId: string) => Promise<any>;
   logout: () => void;
   syncProject: () => void;
-  setCurrentProject: Dispatch<setStateAction<PageData | undefined>>;
+  syncAndDeleteDb: () => void;
+  setCurrentProject: React.Dispatch<React.SetStateAction<Project | undefined>>;
   user: User | null;
   token: string | null;
   pb: PocketBase;
@@ -137,6 +138,7 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     await pb.collection("users").update(user.id, updatedUserWithProject);
+    console.log(updatedUserWithProject);
     setUser(updatedUserWithProject);
     return record;
   }, []);
@@ -158,11 +160,16 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
     const record = await pb.collection("projectData").update(projectId, data);
   };
 
+  const syncAndDeleteDb = async () => {
+    await syncProject();
+    await deleteDataBase();
+  };
+
   useInterval(
     syncProject,
     token && window.location.pathname.split("/").includes("edit")
       ? twoMinutesInMs
-      : null,
+      : null
   );
 
   return (
@@ -179,6 +186,7 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
         fetchProjectData,
         syncProject,
         setCurrentProject,
+        syncAndDeleteDb
       }}
     >
       {children}
