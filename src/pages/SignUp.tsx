@@ -27,7 +27,7 @@ export const SignUp = () => {
   );
 
   return (
-    <section>
+    <section >
       <h2>Sign Up</h2>
       <form onSubmit={handleOnSubmit}>
         <input placeholder="Email" type="email" ref={emailRef} required />
@@ -36,7 +36,17 @@ export const SignUp = () => {
           type="password"
           ref={passwordRef}
           required
-        />
+        />{" "}
+        <button
+          type="button"
+          onClick={() => {
+            if (passwordRef.current) {
+              passwordRef.current.type = "text";
+            }
+          }}
+        >
+          pass
+        </button>
         <button type="submit">Create</button>
         <Link to="/sign-in">Go to Sign In</Link>
       </form>

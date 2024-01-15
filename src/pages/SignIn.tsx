@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { usePocket } from "../contexts/PocketContext";
@@ -6,9 +6,13 @@ import { usePocket } from "../contexts/PocketContext";
 export const SignIn = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const { login } = usePocket()!;
+  const { user, login } = usePocket()!;
   const navigate = useNavigate();
-  console.log("sign");
+
+  useEffect(() => {
+    if (user) navigate("/projects");
+  }, [user]);
+
   const handleOnSubmit = useCallback(
     async (evt: React.FormEvent<HTMLFormElement>) => {
       evt?.preventDefault();
@@ -21,16 +25,36 @@ export const SignIn = () => {
       await login(emailRef.current.value, passwordRef.current.value);
       navigate("/projects");
     },
-    [login],
+    [login]
   );
 
   return (
     <section>
       <h2>Sign In</h2>
       <form onSubmit={handleOnSubmit}>
-        <input placeholder="Email" type="email" ref={emailRef} />
-        <input placeholder="Password" type="password" ref={passwordRef} />
+        <input
+          autoComplete="on"
+          placeholder="Email"
+          type="email"
+          ref={emailRef}
+        />
+        <input
+          autoComplete="on"
+          placeholder="Password"
+          type="password"
+          ref={passwordRef}
+        />
         <button type="submit">Login</button>
+        <button
+          type="button"
+          onClick={() => {
+            if (passwordRef.current) {
+              passwordRef.current.type = "text";
+            }
+          }}
+        >
+          pass
+        </button>
         <Link to="/">New User? Register</Link>
       </form>
     </section>
