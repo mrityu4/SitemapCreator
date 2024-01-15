@@ -4,6 +4,7 @@ import { usePocket } from "../contexts/PocketContext";
 
 import { flushSync } from "react-dom";
 import tickIcon from "../assets/imgs/tick.svg";
+import { deleteDataBase } from "../store";
 
 type Project = {
   name: string | null;
@@ -22,6 +23,7 @@ export const Projects: React.FC = () => {
   const submitNewProjectReq = async (projectName: string | undefined) => {
     if (!projectName) return;
     const project = await createNewProject(projectName);
+    deleteDataBase();
     navigate(`/edit/${project.id}`);
   };
 

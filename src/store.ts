@@ -1,4 +1,4 @@
-import { DBSchema, IDBPDatabase, openDB } from "idb";
+import { DBSchema, IDBPDatabase, openDB,deleteDB } from "idb";
 import { colors, wframes } from "./assets/constants/contants";
 type PageData = {
   name: string;
@@ -31,6 +31,7 @@ interface PageDB extends DBSchema {
     value: PageBlocks;
   };
 }
+
 async function openDatabase(): Promise<IDBPDatabase<PageDB>> {
   return await openDB<PageDB>(dbName, 1, {
     upgrade(db) {
@@ -84,6 +85,7 @@ export async function storePageBlocks(value: PageBlocks): Promise<void> {
 
 //batch store blocks of multiple page
 export async function batchStorePageBlocks(value: PageBlocks[]): Promise<void> {
+  
   const db = await openDatabase();
   const tx = db.transaction(pageStore, "readwrite");
   const store = tx.objectStore(pageStore);
@@ -142,11 +144,6 @@ export async function getBlocksOfAllPages(): Promise<PageBlocks[] | undefined> {
 //   }
 // }
 
-// export async function deleteData(key: string): Promise<void> {
-//   const db = await openDatabase();
-//   const tx = db.transaction(storeName, "readwrite");
-//   const store = tx.objectStore(storeName);
-//   await store.delete(key);
-//   await tx.done;
-//   console.log(`Data deleted with key "${key}"`);
-// }
+export async function deleteDataBase(): Promise<void> {
+  return await deleteDB(dbName);
+}

@@ -46,7 +46,8 @@ function App() {
   let initialDistance: number = 1;
   let initialScale: number;
   let scale = 1;
-  const { logout, syncProject, fetchProjectData } = usePocket()!;
+  const { logout, syncProject, syncAndDeleteDb, fetchProjectData } =
+    usePocket()!;
 
   const [pages, setPages] = React.useState<
     { [key: string]: PageData } | undefined
@@ -74,7 +75,7 @@ function App() {
     // readPages();
   }, []);
 
-  // const readPages = async () => {
+  // csyncAndDeleteDbonst readPages = async () => {
   //   const storedPages = await getSitePages();
   //   // console.log(storedPages);
   //   if (!storedPages) {
@@ -90,7 +91,7 @@ function App() {
   React.useEffect(() => {
     if (!pages) return;
     const tree: HTMLElement | null = document.querySelector("#sitemap > ul");
-    window.addEventListener("beforeunload", syncProject);
+    window.addEventListener("beforeunload", syncAndDeleteDb);
     document.getElementById("root")?.addEventListener("wheel", (e) => {
       // e.preventDefault();
       if (tree) {
@@ -183,13 +184,15 @@ function App() {
 
   return (
     <>
-      <button onClick={syncProject} className="w-8 h-8">
-        <img src={syncImg} alt="add block" />
-      </button>
+      <div className="absolute top-2 right-2">
+        <button title="Add Block" onClick={syncProject} className="w-8 h-8">
+          <img src={syncImg} alt="add block" />
+        </button>
 
-      <button onClick={logout} className="w-8 h-8">
-        <img src={logoutImg} alt="add block" />
-      </button>
+        <button title="Logout" onClick={logout} className="w-8 h-8">
+          <img src={logoutImg} alt="Logout" />
+        </button>
+      </div>
       <TreeContext.Provider value={{ pages, onPageAdd, onPageChange }}>
         <div
           id="sitemap"
