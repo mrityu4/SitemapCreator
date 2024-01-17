@@ -29,33 +29,52 @@ export const SignIn = () => {
   );
 
   return (
-    <section>
-      <h2>Sign In</h2>
-      <form onSubmit={handleOnSubmit}>
-        <input
-          autoComplete="on"
-          placeholder="Email"
-          type="email"
-          ref={emailRef}
-        />
-        <input
-          autoComplete="on"
-          placeholder="Password"
-          type="password"
-          ref={passwordRef}
-        />
-        <button type="submit">Login</button>
+    <section className="flex flex-col justify-center items-center h-screen min-w-[400px]">
+      <h1 className="mb-5">Sign In</h1>
+      <form onSubmit={handleOnSubmit} className="w-full max-w-sm">
+        <div className="items-center mb-5 w-full form-group">
+          <label className="block mb-1 text-left" htmlFor="email">
+            Email:
+          </label>
+          <input
+            className="block p-2 w-full rounded border border-gray-300"
+            placeholder="Enter your email"
+            type="email"
+            ref={emailRef}
+            required
+          />
+        </div>
+        <div className="relative items-center w-full">
+          <label className="block mb-1 text-left">Password:</label>
+          <input
+            className="block p-2 w-full rounded border border-gray-300"
+            placeholder="Enter your password"
+            type="password"
+            ref={passwordRef}
+            required
+          />
+          <button
+            className="absolute bottom-2 right-3"
+            type="button"
+            onClick={() => {
+              if (passwordRef.current) {
+                passwordRef.current.type =
+                  passwordRef.current.type === "password" ? "text" : "password";
+              }
+            }}
+          >
+            Toggle
+          </button>
+        </div>
         <button
-          type="button"
-          onClick={() => {
-            if (passwordRef.current) {
-              passwordRef.current.type = "text";
-            }
-          }}
+          type="submit"
+          className="block p-2 mx-auto my-7 rounded border border-gray-300"
         >
-          pass
+          Log in
         </button>
-        <Link to="/">New User? Register</Link>
+        <p className="mt-2">
+          New User? <Link to="/"> Register</Link>
+        </p>
       </form>
     </section>
   );

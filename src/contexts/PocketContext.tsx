@@ -79,6 +79,7 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     return pb.authStore.onChange((token, model) => {
+      setCurrentProject(undefined);
       setToken(token);
       setUser(model as unknown as User);
     });
@@ -186,7 +187,7 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
         fetchProjectData,
         syncProject,
         setCurrentProject,
-        syncAndDeleteDb
+        syncAndDeleteDb,
       }}
     >
       {children}

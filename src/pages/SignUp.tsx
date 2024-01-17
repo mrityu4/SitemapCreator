@@ -27,28 +27,52 @@ export const SignUp = () => {
   );
 
   return (
-    <section >
-      <h2>Sign Up</h2>
-      <form onSubmit={handleOnSubmit}>
-        <input placeholder="Email" type="email" ref={emailRef} required />
-        <input
-          placeholder="Password"
-          type="password"
-          ref={passwordRef}
-          required
-        />{" "}
+    <section className="flex flex-col justify-center items-center h-screen min-w-[400px]">
+      <h1 className="mb-5">Sign Up</h1>
+      <form onSubmit={handleOnSubmit} className="w-full max-w-sm">
+        <div className="items-center mb-5 w-full form-group">
+          <label className="block mb-1 text-left" htmlFor="email">
+            Email:
+          </label>
+          <input
+            className="block p-2 w-full rounded border border-gray-300"
+            placeholder="Enter your email"
+            type="email"
+            ref={emailRef}
+            required
+          />
+        </div>
+        <div className="relative items-center w-full">
+          <label className="block mb-1 text-left">Password:</label>
+          <input
+            className="block p-2 w-full rounded border border-gray-300"
+            placeholder="Enter your password"
+            type="password"
+            ref={passwordRef}
+            required
+          />
+          <button
+            className="absolute bottom-2 right-3"
+            type="button"
+            onClick={() => {
+              if (passwordRef.current) {
+                passwordRef.current.type =
+                  passwordRef.current.type === "password" ? "text" : "password";
+              }
+            }}
+          >
+            Toggle
+          </button>
+        </div>
         <button
-          type="button"
-          onClick={() => {
-            if (passwordRef.current) {
-              passwordRef.current.type = "text";
-            }
-          }}
+          type="submit"
+          className="p-2 my-7 rounded border border-gray-300"
         >
-          pass
+          Create Account
         </button>
-        <button type="submit">Create</button>
-        <Link to="/sign-in">Go to Sign In</Link>
+        <p className="mt-2">
+          Already have an account? <Link to="/sign-in">Sign In</Link>
+        </p>
       </form>
     </section>
   );

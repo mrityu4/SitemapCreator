@@ -1,10 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { usePocket } from "../contexts/PocketContext";
-
 import { flushSync } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import tickIcon from "../assets/imgs/tick.svg";
+import { usePocket } from "../contexts/PocketContext";
 import { deleteDataBase } from "../store";
+import logoutImg from "./../assets/imgs/logout.svg";
 
 type Project = {
   name: string | null;
@@ -12,7 +12,7 @@ type Project = {
 };
 
 export const Projects: React.FC = () => {
-  const { user, createNewProject } = usePocket()!;
+  const { user, logout, createNewProject } = usePocket()!;
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [creatingNewProject, setCreatingNewProject] = React.useState(false);
   console.log(user?.projects);
@@ -36,6 +36,11 @@ export const Projects: React.FC = () => {
 
   return (
     <div className="pt-10">
+      <div className="absolute top-2 right-2">
+        <button title="Logout" onClick={logout} className="w-8 h-8">
+          <img src={logoutImg} alt="Logout" />
+        </button>
+      </div>
       {projects.length > 0 && (
         <div className="flex flex-col items-center pb-6">
           <h2 className="pb-6">Select a project to start</h2>
