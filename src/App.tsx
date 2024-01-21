@@ -77,7 +77,6 @@ function App() {
 
   // csyncAndDeleteDbonst readPages = async () => {
   //   const storedPages = await getSitePages();
-  //   // console.log(storedPages);
   //   if (!storedPages) {
   //     storePage({ name: "HomePage", key: "homepage", Children: [] });
   //     setPages({
@@ -158,13 +157,10 @@ function App() {
   };
 
   const onPageAdd = async (parentKey: string) => {
-    // console.log("called here");
     const parentPage = pages?.[parentKey];
-    // console.log("3", parentPage);
     if (!parentPage) return;
     const newPage = { name: "", key: crypto.randomUUID(), Children: [] };
     parentPage?.Children.push(newPage.key);
-    // console.log(parentPage);
     await storePage(parentPage);
     await storePage(newPage);
     const readPages = async () => {
@@ -174,12 +170,6 @@ function App() {
     readPages();
   };
 
-  // useEffect(() => {
-  //   console.log(pages, pages?.["homepage"]?.Children?.length);
-  // }, [pages]);
-  //
-  //
-  //
   if (!pages) return null;
 
   return (

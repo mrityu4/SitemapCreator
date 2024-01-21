@@ -15,9 +15,7 @@ export const Projects: React.FC = () => {
   const { user, logout, createNewProject } = usePocket()!;
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [creatingNewProject, setCreatingNewProject] = React.useState(false);
-  console.log(user?.projects);
   const projects: Project[] = user?.projects ?? [];
-  console.log(user);
   const navigate = useNavigate();
 
   const submitNewProjectReq = async (projectName: string | undefined) => {

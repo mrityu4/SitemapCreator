@@ -85,6 +85,9 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
     });
   }, []);
 
+  useEffect(() => {
+  }, [user]);
+
   const register = useCallback(async (email: string, password: string) => {
     return await pb
       .collection("users")
@@ -92,7 +95,11 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    return await pb.collection("users").authWithPassword(email, password);
+    const authData = await pb
+      .collection("users")
+      .authWithPassword(email, password);
+    setUser(authData.record as unknown as User);
+    return authData;
   }, []);
 
   const logout = useCallback(() => {
@@ -111,38 +118,40 @@ export const PocketProvider: React.FC<{ children: ReactNode }> = ({
 
   useInterval(refreshSession, token ? twoMinutesInMs : null);
 
-  const createNewProject = useCallback(async (projectName: string) => {
-    //save in projects db
-    const newProject: {
-      siteData: string;
-      pageData: PageBlocks;
-      userid: string;
-    } = {
-      siteData: JSON.stringify({
-        homepage: { name: "HomePage", key: "homepage", Children: [] },
-      }),
-      pageData: null,
-      userid: user.id,
-    };
-    const record = await pb
-      .collection("projectData")
-      .create<typeof newProject & { id: string }>(newProject);
+  const createNewProject = useCallback(
+    async (projectName: string) => {
+      //save in projects db
+      const newProject: {
+        siteData: string;
+        pageData: PageBlocks;
+        userid: string;
+      } = {
+        siteData: JSON.stringify({
+          homepage: { name: "HomePage", key: "homepage", Children: [] },
+        }),
+        pageData: null,
+        userid: user.id,
+      };
+      const record = await pb
+        .collection("projectData")
+        .create<typeof newProject & { id: string }>(newProject);
 
-    const createdProject = { name: projectName, id: record.id };
-    //
-    setCurrentProject(createdProject);
-    const projectList = user.projects ?? [];
-    const newProjectList = [...projectList, createdProject];
-    const updatedUserWithProject: User = {
-      ...user,
-      projects: newProjectList,
-    };
+      const createdProject = { name: projectName, id: record.id };
+      //
+      setCurrentProject(createdProject);
+      const projectList = user.projects ?? [];
+      const newProjectList = [...projectList, createdProject];
+      const updatedUserWithProject: User = {
+        ...user,
+        projects: newProjectList,
+      };
 
-    await pb.collection("users").update(user.id, updatedUserWithProject);
-    console.log(updatedUserWithProject);
-    setUser(updatedUserWithProject);
-    return record;
-  }, []);
+      await pb.collection("users").update(user.id, updatedUserWithProject);
+      setUser(updatedUserWithProject);
+      return record;
+    },
+    [user]
+  );
 
   const fetchProjectData = async (id: string) => {
     return await pb.collection("projectData").getOne(id);

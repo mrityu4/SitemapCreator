@@ -8,11 +8,11 @@ import txt3 from "../imgs/t3.svg";
 import txt4 from "../imgs/t4.svg";
 
 export const colors = [
-  "#cdb4db",
-  "#ffc8dd",
-  "#ffafcc",
-  "#bde0fe",
-  "#a2d2ff",
+  "#2A2E45",
+  "#7A542E",
+  "#9E8576",
+  "#A499BE",
+  "#9BA2FF",
 ] as const;
 
 export const wframes = {

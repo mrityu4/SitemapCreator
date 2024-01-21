@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import Input from "../input/input";
-import { storePageBlocks, getPageBlocks } from "../../store";
+import React from "react";
 import { colors, wframes } from "../../assets/constants/contants";
+import { ReactComponent as AddBlock } from "../../assets/imgs/addBlock.svg";
 import { ReactComponent as AddIcon } from "../../assets/imgs/addIcon.svg";
 import { ReactComponent as OpenIcon } from "../../assets/imgs/open.svg";
-import { ReactComponent as AddBlock } from "../../assets/imgs/addBlock.svg";
+import { getPageBlocks, storePageBlocks } from "../../store";
+import Input from "../input/input";
 
 import BlockComponent from "../Block/Block";
 import Button from "../Button/Button";
@@ -51,7 +51,7 @@ function Page({
     const newBlock: Block = {
       name: "",
       key: crypto.randomUUID(),
-      color: "#cdb4db",
+      color: "#2A2E45",
       wframe: "img1",
     };
     let pageBlocks: Blocks = [];
@@ -121,7 +121,7 @@ function Page({
   };
   return (
     <div
-      className="relative mx-auto border-2 border-teal-600 rounded-lg w-36 p-2 pb-3"
+      className="relative p-2 pb-3 mx-auto w-36 rounded-lg border-2 border-teal-600"
       onMouseEnter={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
     >

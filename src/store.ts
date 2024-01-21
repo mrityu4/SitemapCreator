@@ -99,7 +99,6 @@ export async function batchStorePageBlocks(value: PageBlocks[]): Promise<void> {
 export async function getPageBlocks(
   key: string,
 ): Promise<PageBlocks | undefined> {
-  // console.log(key);
   const db = await openDatabase();
   const tx = db.transaction(pageStore, "readwrite");
   const store = tx.objectStore(pageStore);
@@ -125,7 +124,6 @@ export async function getBlocksOfAllPages(): Promise<PageBlocks[] | undefined> {
   const store = tx.objectStore(pageStore);
   let allPagesBlockData = await store.getAll();
   await tx.done;
-  console.log(allPagesBlockData);
   return allPagesBlockData;
 }
 // export async function editData(key: string, newMessage: string): Promise<void> {

@@ -5,12 +5,11 @@ import SiteMapApp from "./App";
 import { RequireAuth } from "./components/RequireAuth";
 import { PocketProvider } from "./contexts/PocketContext";
 import "./index.css";
+import { Projects } from "./pages/Projects";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
-import { Projects } from "./pages/Projects";
 
 export const App = () => {
-  // console.log("hete");
   return (
     <PocketProvider>
       <BrowserRouter>
@@ -30,5 +29,5 @@ export const App = () => {
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <App />,
+  <App />
 );
